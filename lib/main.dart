@@ -12,7 +12,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   final BackEnd _backEnd;
-  MyApp(this._backEnd);
+  const MyApp(this._backEnd);
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(

@@ -1,20 +1,17 @@
 // import 'package:expense_tracker/home_screen.dart';
+import 'package:expense_tracker/backend.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/constants.dart';
+import 'package:provider/provider.dart';
 
-class TopButtons extends StatefulWidget {
-  const TopButtons({
-    Key? key,
-    required this.selected,
-  }) : super(key: key);
+class TopButtons extends StatelessWidget {
+  // final List<bool> selected;
+  // final Function buttonFunction;
+  // TopButtons(
+  //   // this.selected,
+  //   //  this.buttonFunction
+  // );
 
-  final List<bool> selected;
-
-  @override
-  State<TopButtons> createState() => _TopButtonsState();
-}
-
-class _TopButtonsState extends State<TopButtons> {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -67,19 +64,12 @@ class _TopButtonsState extends State<TopButtons> {
               ),
             ),
           ],
-          isSelected: widget.selected,
+          isSelected: Provider.of<BackEnd>(context).selected,
           onPressed: (int newIndex) {
-            setState(
-              () {
-                for (int index = 0; index < widget.selected.length; index++) {
-                  if (index == newIndex) {
-                    widget.selected[index] = true;
-                  } else {
-                    widget.selected[index] = false;
-                  }
-                }
-              },
-            );
+            Provider.of<BackEnd>(
+              context,
+              listen: false,
+            ).selectNewType(newIndex);
           },
         ),
       ),

@@ -36,6 +36,9 @@ class BackEnd extends ChangeNotifier {
 
   bool loading = true;
 
+  int selectedType = 0; //initially it will show up all the transactions.
+  List<bool> selected = [true, false, false];
+
   Future init() async {
     final sprdSheet = await gSheets.spreadsheet(spreadsheetId);
     worksheet = sprdSheet.worksheetByTitle(worksheetName);
@@ -50,6 +53,19 @@ class BackEnd extends ChangeNotifier {
       noOfTransactions++;
     }
     loadTransactions();
+    notifyListeners();
+  }
+
+  selectNewType(int newIndex) {
+    for (int index = 0; index < selected.length; index++) {
+      if (index == newIndex) {
+        selected[index] = true;
+        selectedType = index;
+        // notifyListeners();
+      } else {
+        selected[index] = false;
+      }
+    }
     notifyListeners();
   }
 

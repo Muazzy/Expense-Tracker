@@ -63,7 +63,7 @@ class TransactionCard extends StatelessWidget {
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                   color: expenseOrIncome == 'expense'
-                      ? Colors.red
+                      ? Colors.red[900]
                       : Colors.green[900],
                 ),
               ),
