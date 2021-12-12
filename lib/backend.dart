@@ -1,6 +1,9 @@
-// ignore_for_file: use_key_in_widget_constructors
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_final_fields
+
+import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:gsheets/gsheets.dart';
 
 const credentials = r'''
@@ -30,14 +33,18 @@ class BackEnd extends ChangeNotifier {
 
   int noOfTransactions = 0;
 
-  List<List<dynamic>> transactions = [];
-  List<List<dynamic>> totalExpense = [];
-  List<List<dynamic>> totalIncome = [];
+  List<List<dynamic>> _transactions = [];
+  List<List<dynamic>> _totalExpense = [];
+  List<List<dynamic>> _totalIncome = [];
 
   bool loading = true;
 
   int selectedType = 0; //initially it will show up all the transactions.
   List<bool> selected = [true, false, false];
+
+  //for newTransaction function
+
+  bool isIncome = false;
 
   Future init() async {
     final sprdSheet = await gSheets.spreadsheet(spreadsheetId);
@@ -48,12 +55,12 @@ class BackEnd extends ChangeNotifier {
 
   Future countRows() async {
     while (
-        (await worksheet!.values.value(column: 3, row: noOfTransactions + 1)) !=
+        (await worksheet!.values.value(column: 4, row: noOfTransactions + 1)) !=
             '') {
       noOfTransactions++;
     }
     loadTransactions();
-    notifyListeners();
+    // notifyListeners();
   }
 
   selectNewType(int newIndex) {
@@ -73,19 +80,23 @@ class BackEnd extends ChangeNotifier {
     //checking if the worksheet is null then just exiting the function
     if (worksheet == null) return;
 
+    //capturing the whole transaction entries to avoid too many requests issue
+    dynamic transactionlist = await worksheet!.values.allColumns(fromRow: 2);
+    // print(transactionlist);
+
     //looping thru each row if the worksheet is not empty
     //and storing transaction name, amount, and expense or income parameter
-    for (int i = 1; i < noOfTransactions; i++) {
-      final String transactionName =
-          await worksheet!.values.value(column: 1, row: i + 1);
-      final String transactionAmount =
-          await worksheet!.values.value(column: 2, row: i + 1);
-      final String transactionType =
-          await worksheet!.values.value(column: 3, row: i + 1);
+    for (int i = 0; i < noOfTransactions - 1; i++) {
+      // final String transactionID = transactionList[0][i];
+      final String transactionName = transactionlist[1][i];
+      final String transactionAmount = transactionlist[2][i];
+
+      final String transactionType = transactionlist[3][i];
 
       //checking if our locally created list is updated, if not, we just add those transaction in our list too.
-      if (transactions.length < noOfTransactions) {
-        transactions.add([
+      if (_transactions.length < noOfTransactions) {
+        _transactions.add([
+          // transactionID,
           transactionName,
           transactionAmount,
           transactionType,
@@ -94,7 +105,7 @@ class BackEnd extends ChangeNotifier {
       updateTotalExpense();
       updateTotalIncome();
     }
-    // print(Transactions);
+
     // this will stop the circular loading indicator
     loading = false;
     notifyListeners();
@@ -106,7 +117,7 @@ class BackEnd extends ChangeNotifier {
     noOfTransactions++;
 
     //adding the new transaction to the locally created list first then the actual spreadsheet.
-    transactions.add([
+    _transactions.add([
       name,
       amount,
       isIncome ? 'income' : 'expense',
@@ -116,40 +127,52 @@ class BackEnd extends ChangeNotifier {
       amount,
       isIncome ? 'income' : 'expense',
     ]);
-    calculateExpense();
-    calculateIncome();
+    _calculateExpense();
+    _calculateIncome();
+    updateTotalExpense();
+    updateTotalIncome();
     notifyListeners();
   }
 
-  double calculateIncome() {
+  // Future delete(String name) async {
+  //   if (worksheet == null) return;
+  //   int row = await worksheet!.values.rowIndexOf(name);
+  //   await worksheet!.deleteRow(row);
+  //   loadTransactions();
+  //   updateTotalExpense();
+  //   updateTotalIncome();
+  //   notifyListeners();
+  // }
+
+  double _calculateIncome() {
     double income = 0;
-    for (int i = 0; i < transactions.length; i++) {
-      if (transactions[i][2] == 'income') {
-        income += double.parse(transactions[i][1]);
+    for (int i = 0; i < _transactions.length; i++) {
+      if (_transactions[i][2] == 'income') {
+        income += double.parse(_transactions[i][1]);
       }
     }
     return income;
   }
 
-  double calculateExpense() {
+  double _calculateExpense() {
     double expense = 0;
-    for (int i = 0; i < transactions.length; i++) {
-      if (transactions[i][2] == 'expense') {
-        expense += double.parse(transactions[i][1]);
+    for (int i = 0; i < _transactions.length; i++) {
+      if (_transactions[i][2] == 'expense') {
+        expense += double.parse(_transactions[i][1]);
       }
     }
     return expense;
   }
 
   updateTotalIncome() {
-    if (transactions.isEmpty) return;
-    totalIncome = [];
-    for (int i = 0; i < transactions.length; i++) {
-      if (transactions[i][2] == 'income') {
-        final String name = transactions[i][0];
-        final String amount = transactions[i][1];
-        final String transactionType = transactions[i][2];
-        totalIncome.add([
+    if (_transactions.isEmpty) return;
+    _totalIncome = [];
+    for (int i = 0; i < _transactions.length; i++) {
+      if (_transactions[i][2] == 'income') {
+        final String name = _transactions[i][0];
+        final String amount = _transactions[i][1];
+        final String transactionType = _transactions[i][2];
+        _totalIncome.add([
           name,
           amount,
           transactionType,
@@ -160,14 +183,14 @@ class BackEnd extends ChangeNotifier {
   }
 
   updateTotalExpense() {
-    if (transactions.isEmpty) return;
-    totalExpense = [];
-    for (int i = 0; i < transactions.length; i++) {
-      if (transactions[i][2] == 'expense') {
-        final String name = transactions[i][0];
-        final String amount = transactions[i][1];
-        final String transactionType = transactions[i][2];
-        totalExpense.add([
+    if (_transactions.isEmpty) return;
+    _totalExpense = [];
+    for (int i = 0; i < _transactions.length; i++) {
+      if (_transactions[i][2] == 'expense') {
+        final String name = _transactions[i][0];
+        final String amount = _transactions[i][1];
+        final String transactionType = _transactions[i][2];
+        _totalExpense.add([
           name,
           amount,
           transactionType,
@@ -177,34 +200,28 @@ class BackEnd extends ChangeNotifier {
     notifyListeners();
   }
 
+  toggleIsIncome(bool newValue) {
+    isIncome = newValue;
+    notifyListeners();
+  }
+
   List get expenseList {
-    return totalExpense;
+    return _totalExpense;
   }
 
   List get incomeList {
-    return totalIncome;
+    return _totalIncome;
   }
 
   List get transactionList {
-    return transactions;
+    return _transactions;
+  }
+
+  double get income {
+    return _calculateIncome();
+  }
+
+  double get expense {
+    return _calculateExpense();
   }
 }
-
-
-
-// init() async {
-// //init gsheets, initializing the instance of gsheets just like i did with sqflite db
-//   final gsheets = GSheets(credentials);
-
-//   //note: a spreadsheet can have multiple worksheets
-
-//   // fetching spreadsheet by its id
-//   final spreadSheet = await gsheets.spreadsheet(spreadsheetId);
-
-//   //getting worksheet by its title
-//   var sheet = spreadSheet.worksheetByTitle('ExpenseTrackerV1');
-
-//   //updating a cell
-//   //sheet! (if the sheet actually exits or not, so its a null check)
-//   await sheet!.values.insertValue('helloWorld', column: 1, row: 2);
-// }

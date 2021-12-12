@@ -1,4 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors
+// ignore_for_file: use_key_in_widget_constructors, unused_field
 
 import 'package:expense_tracker/backend.dart';
 import 'package:expense_tracker/screens/home_screen.dart';

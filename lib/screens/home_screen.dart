@@ -12,18 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
-  // final _textcontrollerAMOUNT = TextEditingController();
-  // final _textcontrollerITEM = TextEditingController();
-  // final _formKey = GlobalKey<FormState>();
-  // bool _isIncome = false;
-
   @override
   Widget build(BuildContext context) {
-    // void enterTransaction() {
-    //   Provider.of<BackEnd>(context).insertTransaction(
-    //       _textcontrollerITEM.text, _textcontrollerAMOUNT.text, _isIncome);
-    // }
-
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: AddButton(),
@@ -35,7 +25,12 @@ class HomeScreen extends StatelessWidget {
             children: [
               TopButtons(),
               SizedBox(height: 20),
-              TopNeuCard(balance: '1500', expense: '300', income: '1800'),
+              TopNeuCard(
+                  balance: (Provider.of<BackEnd>(context).income -
+                          Provider.of<BackEnd>(context).expense)
+                      .toString(),
+                  expense: (Provider.of<BackEnd>(context).expense).toString(),
+                  income: (Provider.of<BackEnd>(context).income).toString()),
               SizedBox(height: Provider.of<BackEnd>(context).loading ? 0 : 15),
               Expanded(
                 child: Provider.of<BackEnd>(context).loading

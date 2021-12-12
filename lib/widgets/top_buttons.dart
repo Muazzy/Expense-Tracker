@@ -1,17 +1,12 @@
 // import 'package:expense_tracker/home_screen.dart';
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:expense_tracker/backend.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/constants.dart';
 import 'package:provider/provider.dart';
 
 class TopButtons extends StatelessWidget {
-  // final List<bool> selected;
-  // final Function buttonFunction;
-  // TopButtons(
-  //   // this.selected,
-  //   //  this.buttonFunction
-  // );
-
   @override
   Widget build(BuildContext context) {
     return Center(

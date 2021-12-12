@@ -13,6 +13,8 @@ class Income extends StatelessWidget {
     return ListView.builder(
       itemCount: Provider.of<BackEnd>(context).incomeList.length,
       itemBuilder: (context, index) {
+        Provider.of<BackEnd>(context).transactionList[index][0].toString();
+
         return TransactionCard(
             transactionName: Provider.of<BackEnd>(context).incomeList[index][0],
             money: Provider.of<BackEnd>(context).incomeList[index][1],
