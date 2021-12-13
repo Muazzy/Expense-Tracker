@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AddButton extends StatelessWidget {
-  // final Function? function;
-  // AddButton({this.function});
   final _textcontrollerAMOUNT = TextEditingController();
   final _textcontrollerITEM = TextEditingController();
   final _formKey = GlobalKey<FormState>();
