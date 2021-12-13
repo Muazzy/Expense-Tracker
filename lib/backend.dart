@@ -55,7 +55,7 @@ class BackEnd extends ChangeNotifier {
 
   Future countRows() async {
     while (
-        (await worksheet!.values.value(column: 4, row: noOfTransactions + 1)) !=
+        (await worksheet!.values.value(column: 3, row: noOfTransactions + 1)) !=
             '') {
       noOfTransactions++;
     }
