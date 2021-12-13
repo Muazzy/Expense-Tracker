@@ -87,10 +87,10 @@ class BackEnd extends ChangeNotifier {
     //and storing transaction name, amount, and expense or income parameter
     for (int i = 0; i < noOfTransactions - 1; i++) {
       // final String transactionID = transactionList[0][i];
-      final String transactionName = transactionlist[1][i];
-      final String transactionAmount = transactionlist[2][i];
+      final String transactionName = transactionlist[0][i];
+      final String transactionAmount = transactionlist[1][i];
 
-      final String transactionType = transactionlist[3][i];
+      final String transactionType = transactionlist[2][i];
 
       //checking if our locally created list is updated, if not, we just add those transaction in our list too.
       if (_transactions.length < noOfTransactions) {

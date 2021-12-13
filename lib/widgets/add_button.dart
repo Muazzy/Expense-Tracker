@@ -25,10 +25,16 @@ class AddButton extends StatelessWidget {
                     builder: (BuildContext context, setState) {
                       return AlertDialog(
                         backgroundColor: Colors.grey[850],
-                        title: const Text(
-                          'N E W  T R A N S A C T I O N',
-                          style: TextStyle(
-                            color: Colors.greenAccent,
+                        title: Center(
+                          child: Text(
+                            'N E W  T R A N S A C T I O N',
+
+                            // overflow: TextOverflow.ellipsis,
+
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.greenAccent,
+                            ),
                           ),
                         ),
                         content: SingleChildScrollView(

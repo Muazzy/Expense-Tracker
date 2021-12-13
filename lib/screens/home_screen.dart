@@ -28,9 +28,14 @@ class HomeScreen extends StatelessWidget {
               TopNeuCard(
                   balance: (Provider.of<BackEnd>(context).income -
                           Provider.of<BackEnd>(context).expense)
+                      .toInt()
                       .toString(),
-                  expense: (Provider.of<BackEnd>(context).expense).toString(),
-                  income: (Provider.of<BackEnd>(context).income).toString()),
+                  expense: (Provider.of<BackEnd>(context).expense)
+                      .toInt()
+                      .toString(),
+                  income: (Provider.of<BackEnd>(context).income)
+                      .toInt()
+                      .toString()),
               SizedBox(height: Provider.of<BackEnd>(context).loading ? 0 : 15),
               Expanded(
                 child: Provider.of<BackEnd>(context).loading
