@@ -113,20 +113,21 @@ class TopNeuCard extends StatelessWidget {
         ),
         //its the decoration for the box
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: Colors.grey[850],
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.grey.shade900,
-                  offset: const Offset(4.0, 4.0),
-                  blurRadius: 15.0,
-                  spreadRadius: 1.0),
-              BoxShadow(
-                  color: Colors.grey.shade800,
-                  offset: const Offset(-4.0, -4.0),
-                  blurRadius: 15.0,
-                  spreadRadius: 1.0),
-            ]),
+          borderRadius: BorderRadius.circular(15),
+          color: Colors.grey[850],
+          boxShadow: [
+            BoxShadow(
+                color: Colors.grey.shade900,
+                offset: const Offset(4.0, 4.0),
+                blurRadius: 15.0,
+                spreadRadius: 1.0),
+            BoxShadow(
+                color: Colors.grey.shade800,
+                offset: const Offset(-4.0, -4.0),
+                blurRadius: 15.0,
+                spreadRadius: 1.0),
+          ],
+        ),
       ),
     );
   }
