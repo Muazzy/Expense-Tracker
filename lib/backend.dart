@@ -68,7 +68,6 @@ class BackEnd extends ChangeNotifier {
       if (index == newIndex) {
         selected[index] = true;
         selectedType = index;
-        // notifyListeners();
       } else {
         selected[index] = false;
       }
